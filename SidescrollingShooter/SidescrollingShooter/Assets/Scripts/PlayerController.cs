@@ -9,118 +9,58 @@ public class PlayerController : MonoBehaviour
     private int jumpHeight;
 
     [SerializeField]
-    private float boostSpeed;
-
-    [SerializeField]
     private float totalJumpTime;
 
     [SerializeField]
-    private Animator animator;
+    private float speed;
 
-    [SerializeField]
-    private float boostTime;
-
-    [SerializeField]
-    private float startSpeed;
-
-    [SerializeField]
-    GameObject boostEffect;
+    //[SerializeField]
+    //private Animator animator;
 
     private float jumpTime;
     private bool isJumping = false;
     private Rigidbody2D playerRigidBody;
-    private RigidbodyConstraints2D originalConstraints;
-    private float storedYPos;
-    private Vector3 storedVelocity;
-    private float currentSpeed;
-    private float boostTimer;
-    private bool isBoosting = false;
-    private bool canBoost = true;
-    public bool IsBoosting => isBoosting;
 
     void Start()
     {
         playerRigidBody = GetComponent<Rigidbody2D>();
-        originalConstraints = playerRigidBody.constraints;
-
         jumpTime = totalJumpTime;
-        boostTimer = boostTime;
-
-        currentSpeed = startSpeed;
-        //GlobalGameStats.platformSpeed = currentSpeed;
     }
 
     void Update()
     {        
         HandleJump();
-        HandleBoost();
+        HandleMove();
         MaintainAir();
+    }
+
+    private void HandleMove()
+    {
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            playerRigidBody.velocity = new Vector2(-speed, playerRigidBody.velocity.y);
+        }
+        else if (Input.GetKey(KeyCode.RightArrow))
+        {
+            playerRigidBody.velocity = new Vector2(speed, playerRigidBody.velocity.y);
+        }
+        else
+        {
+            playerRigidBody.velocity = new Vector2(0, playerRigidBody.velocity.y);
+        }
+    
     }
 
     private void HandleJump()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (IsGrounded() || isBoosting)
+            if (IsGrounded())
             {
-                EndBoost();
                 isJumping = true;
-                playerRigidBody.velocity = Vector2.up * jumpHeight;
-                animator.SetBool("isJumping", isJumping);
+                playerRigidBody.velocity = new Vector2(playerRigidBody.velocity.x, jumpHeight);
+                //animator.SetBool("isJumping", isJumping);
             }
-        }
-    }
-
-    private void HandleBoost()
-    {
-        if (IsGrounded())
-            canBoost = true;
-
-        if (Input.GetKeyDown(KeyCode.Return) && !isBoosting)
-        {
-            if (!canBoost)
-                return;
-
-            EndJump();
-
-            //currentSpeed = GlobalGameStats.platformSpeed;
-            //GlobalGameStats.platformSpeed = currentSpeed * boostSpeed;
-
-            storedVelocity = playerRigidBody.velocity;
-            storedYPos = playerRigidBody.gameObject.transform.position.y;
-
-            isBoosting = true;
-            canBoost = false;
-
-            boostEffect.SetActive(true);
-            animator.SetBool("isJumping", false);
-            animator.SetBool("isBoosting", isBoosting);
-
-            //AudioManagerController.Instance.PlaySound("Boost");
-        }
-
-        if (isBoosting)
-        {
-            boostTimer -= Time.deltaTime;
-            if (boostTimer < 0)
-            {
-                EndBoost();
-            }
-        }
-    }
-
-    private void EndBoost()
-    {
-        if (isBoosting)
-        {
-            //GlobalGameStats.platformSpeed = currentSpeed;
-            isBoosting = false;
-            boostTimer = boostTime;
-
-            playerRigidBody.velocity = new Vector2(0, -1.5f); // Yuk!
-
-            boostEffect.SetActive(false);
-            animator.SetBool("isBoosting", false);
         }
     }
 
@@ -132,14 +72,11 @@ public class PlayerController : MonoBehaviour
 
     private void MaintainAir()
     {
-        if (isBoosting)
-            playerRigidBody.gameObject.transform.position = new Vector3(playerRigidBody.gameObject.transform.position.x, storedYPos);
-
         if (Input.GetKey(KeyCode.Space) && isJumping)
         {
             if (jumpTime >= 0)
             {
-                playerRigidBody.velocity = Vector2.up * jumpHeight;
+                playerRigidBody.velocity = new Vector2(playerRigidBody.velocity.x, jumpHeight);
                 jumpTime -= Time.deltaTime;
             }
             else
@@ -153,8 +90,8 @@ public class PlayerController : MonoBehaviour
             EndJump();
         }
 
-        if (!isJumping && IsGrounded())
-            animator.SetBool("isJumping", isJumping);
+        //if (!isJumping && IsGrounded())
+            //animator.SetBool("isJumping", isJumping);
     }
 
     private bool IsGrounded()
