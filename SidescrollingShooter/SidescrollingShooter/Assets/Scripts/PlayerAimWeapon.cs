@@ -3,11 +3,21 @@
 public class PlayerAimWeapon : MonoBehaviour
 {
     [SerializeField]
+    private Transform gunTip;
+
+    [SerializeField]
     private Transform aimTransform;
+
+    [SerializeField]
+    private Animator animator;
+
+    [SerializeField]
+    private LayerMask enemyLayerMask;
 
     void Update()
     {
         HandleAim();
+        HandleShoot();
     }
 
     private void HandleAim()
@@ -23,7 +33,15 @@ public class PlayerAimWeapon : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
+            animator.SetTrigger("Shoot");
+            var ray = Physics2D.Raycast(gunTip.position, MousePosition.GetMouseWorldPosition(Input.mousePosition, Camera.main) - transform.position, 20f, enemyLayerMask);
 
+            if (ray.collider != null)
+            {
+                var hitEnemy = ray.collider.gameObject;
+                var enemyController = hitEnemy.GetComponent<EnemyController>();
+                enemyController.TakeDamage(1);
+            }          
         }
     }
 }

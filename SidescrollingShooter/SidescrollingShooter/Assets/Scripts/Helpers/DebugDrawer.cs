@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class DebugDrawer
 {
+
+
     public static void DrawDebugCast(BoxCollider2D collider, RaycastHit2D cast, float extraHeight)
     {
         Color rayColor;

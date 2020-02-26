@@ -8,4 +8,5 @@ public class MousePosition
         result.z = 0f;
         return result;
     }
+
 }
