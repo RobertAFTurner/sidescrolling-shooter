@@ -21,6 +21,9 @@ public class PlayerAimWeapon : MonoBehaviour
 
     private void HandleShoot()
     {
+        if(Input.GetMouseButtonDown(0))
+        {
 
+        }
     }
 }
