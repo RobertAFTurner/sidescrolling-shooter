@@ -36,19 +36,12 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMove()
     {
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
+        if (Input.GetKey(KeyCode.A))
             playerRigidBody.velocity = new Vector2(-speed, playerRigidBody.velocity.y);
-        }
-        else if (Input.GetKey(KeyCode.RightArrow))
-        {
+        else if (Input.GetKey(KeyCode.D))
             playerRigidBody.velocity = new Vector2(speed, playerRigidBody.velocity.y);
-        }
         else
-        {
             playerRigidBody.velocity = new Vector2(0, playerRigidBody.velocity.y);
-        }
-    
     }
 
     private void HandleJump()
