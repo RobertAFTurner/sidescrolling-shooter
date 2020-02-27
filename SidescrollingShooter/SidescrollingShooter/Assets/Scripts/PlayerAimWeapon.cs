@@ -14,6 +14,9 @@ public class PlayerAimWeapon : MonoBehaviour
     [SerializeField]
     private LayerMask enemyLayerMask;
 
+    [SerializeField]
+    private GameObject impactEffect;
+
     void Update()
     {
         HandleAim();
@@ -39,8 +42,11 @@ public class PlayerAimWeapon : MonoBehaviour
             if (ray.collider != null)
             {
                 var hitEnemy = ray.collider.gameObject;
-                var enemyController = hitEnemy.GetComponent<EnemyController>();
+                var enemyController = hitEnemy.GetComponent<HealthController>();
                 enemyController.TakeDamage(1);
+
+                var effect = Instantiate(impactEffect, ray.point, new Quaternion());
+                effect.transform.SetParent(hitEnemy.transform);
             }          
         }
     }
