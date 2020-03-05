@@ -37,9 +37,15 @@ public class PlayerController : MonoBehaviour
     private void HandleMove()
     {
         if (Input.GetKey(KeyCode.A))
+        {
             playerRigidBody.velocity = new Vector2(-speed, playerRigidBody.velocity.y);
+            gameObject.transform.rotation = new Quaternion(0, 180, 0, 0);
+        }
         else if (Input.GetKey(KeyCode.D))
+        {
             playerRigidBody.velocity = new Vector2(speed, playerRigidBody.velocity.y);
+            gameObject.transform.rotation = new Quaternion(0, 0, 0, 0);
+        }           
         else
             playerRigidBody.velocity = new Vector2(0, playerRigidBody.velocity.y);
     }
