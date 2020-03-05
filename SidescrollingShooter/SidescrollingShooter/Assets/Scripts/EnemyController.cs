@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : EntityController
 {
     [SerializeField]
     private GameObject player;
@@ -14,12 +14,17 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private int attackStrength;
     
+    [SerializeField]
+    private float attackSpeed;
+
+    [SerializeField]
+    private int pointsValue;
+
     private Rigidbody2D myRigidbody;
 
     private bool isAttacking;
 
-    [SerializeField]
-    private float attackSpeed;
+
 
     private float attackTimer;
 
@@ -85,5 +90,11 @@ public class EnemyController : MonoBehaviour
             isAttacking = false;
             attackTimer = 0;
         }
+    }
+
+    public override void HandleDeath()
+    {
+        GlobalGameStats.score += pointsValue;
+        Destroy(gameObject);
     }
 }

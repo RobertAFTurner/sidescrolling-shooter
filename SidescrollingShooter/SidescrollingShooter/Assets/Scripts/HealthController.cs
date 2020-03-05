@@ -6,7 +6,7 @@ using UnityEngine;
 public class HealthController : MonoBehaviour
 {
     [SerializeField]
-    int hitPoints = 1;
+    int hitPoints = 1;    
 
     private void Update()
     {
@@ -16,7 +16,9 @@ public class HealthController : MonoBehaviour
     private void CheckForDeath()
     {
         if (hitPoints <= 0)
-            Destroy(gameObject);
+        {
+            gameObject.GetComponent<EntityController>().HandleDeath();
+        }
     }
 
     public void TakeDamage(int damage)

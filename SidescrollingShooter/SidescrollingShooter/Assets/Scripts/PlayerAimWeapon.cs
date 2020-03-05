@@ -30,6 +30,16 @@ public class PlayerAimWeapon : MonoBehaviour
         var aimDirection = (mousePos - transform.position).normalized;
         var angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
         aimTransform.eulerAngles = new Vector3(0, 0, angle);
+
+        var localScale = new Vector3(0.5f, 0.5f, 1f);
+
+        if (angle > 90 || angle < -90)
+            localScale.y = -0.5f;
+        else
+            localScale.y = 0.5f;
+
+        aimTransform.localScale = localScale;
+
     }
 
     private void HandleShoot()

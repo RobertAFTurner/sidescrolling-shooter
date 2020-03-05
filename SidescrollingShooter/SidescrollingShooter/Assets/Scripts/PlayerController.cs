@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : EntityController
 {
     [SerializeField]
     private LayerMask floorLayerMask;
@@ -106,5 +106,10 @@ public class PlayerController : MonoBehaviour
                                               floorLayerMask);
 
         return cast.collider != null;
+    }
+
+    public override void HandleDeath()
+    {
+        Destroy(gameObject);
     }
 }
