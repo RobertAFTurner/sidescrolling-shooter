@@ -111,8 +111,6 @@ public class PlayerController : EntityController
 
     public void UpgradeWeapon()
     {
-        // Maybe just hold references to both objects?
-
         var aimObj = gameObject.transform.FindChild("Aim");
         aimObj.transform.FindChild("Gun").gameObject.SetActive(false);
         var machineGunObject = aimObj.transform.FindChild("MachineGun").gameObject;
@@ -121,6 +119,7 @@ public class PlayerController : EntityController
 
         var machineGunAnimator = machineGunObject.GetComponent<Animator>();
         gameObject.GetComponent<PlayerAimWeapon>().SetAnimator(machineGunAnimator);
+        gameObject.GetComponent<PlayerAimWeapon>().gunUpgraded = true;
     }
 
     public override void HandleDeath()

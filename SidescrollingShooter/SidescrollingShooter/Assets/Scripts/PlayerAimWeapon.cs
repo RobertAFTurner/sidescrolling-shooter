@@ -18,6 +18,18 @@ public class PlayerAimWeapon : MonoBehaviour
     [SerializeField]
     private GameObject impactEffect;
 
+    public bool gunUpgraded = false;
+
+    private float shootTimer;
+
+    [SerializeField]
+    private float shootTime = 0.2f;
+
+    private void Start()
+    {
+        shootTimer = shootTime;
+    }
+
     void Update()
     {
         HandleAim();
@@ -45,20 +57,47 @@ public class PlayerAimWeapon : MonoBehaviour
 
     private void HandleShoot()
     {
+
+        if (gunUpgraded)
+            HandleShootMachineGun();
+        else
+            HandleShootPistol();
+    }
+
+    private void HandleShootMachineGun()
+    {
+        if(Input.GetMouseButton(0))
+        {
+            shootTimer -= Time.deltaTime;
+            if(shootTimer <= 0)
+            {
+                ShootWeapon();
+                shootTimer = shootTime;
+            }
+        }
+    }
+
+    private void HandleShootPistol()
+    {
         if(Input.GetMouseButtonDown(0))
         {
-            animator.SetTrigger("Shoot");
-            var ray = Physics2D.Raycast(gunTip.position, MousePosition.GetMouseWorldPosition(Input.mousePosition, Camera.main) - transform.position, 20f, enemyLayerMask);
+            ShootWeapon();                     
+        }
+    }
 
-            if (ray.collider != null)
-            {
-                var hitEnemy = ray.collider.gameObject;
-                var enemyController = hitEnemy.GetComponent<HealthController>();
-                enemyController.TakeDamage(1);
+    private void ShootWeapon()
+    {
+        animator.SetTrigger("Shoot");
+        var ray = Physics2D.Raycast(gunTip.position, MousePosition.GetMouseWorldPosition(Input.mousePosition, Camera.main) - transform.position, 20f, enemyLayerMask);
 
-                var effect = Instantiate(impactEffect, ray.point, new Quaternion());
-                effect.transform.SetParent(hitEnemy.transform);
-            }          
+        if (ray.collider != null)
+        {
+            var hitEnemy = ray.collider.gameObject;
+            var enemyController = hitEnemy.GetComponent<HealthController>();
+            enemyController.TakeDamage(1);
+
+            var effect = Instantiate(impactEffect, ray.point, new Quaternion());
+            effect.transform.SetParent(hitEnemy.transform);
         }
     }
 
