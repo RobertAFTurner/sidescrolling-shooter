@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PlayerAimWeapon : MonoBehaviour
 {
@@ -59,5 +60,10 @@ public class PlayerAimWeapon : MonoBehaviour
                 effect.transform.SetParent(hitEnemy.transform);
             }          
         }
+    }
+
+    internal void SetAnimator(Animator newAnimator)
+    {
+        animator = newAnimator;
     }
 }

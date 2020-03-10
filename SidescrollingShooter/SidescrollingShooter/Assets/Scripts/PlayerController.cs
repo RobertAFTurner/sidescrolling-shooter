@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PlayerController : EntityController
 {
@@ -106,6 +107,20 @@ public class PlayerController : EntityController
                                               floorLayerMask);
 
         return cast.collider != null;
+    }
+
+    public void UpgradeWeapon()
+    {
+        // Maybe just hold references to both objects?
+
+        var aimObj = gameObject.transform.FindChild("Aim");
+        aimObj.transform.FindChild("Gun").gameObject.SetActive(false);
+        var machineGunObject = aimObj.transform.FindChild("MachineGun").gameObject;
+
+        machineGunObject.SetActive(true);
+
+        var machineGunAnimator = machineGunObject.GetComponent<Animator>();
+        gameObject.GetComponent<PlayerAimWeapon>().SetAnimator(machineGunAnimator);
     }
 
     public override void HandleDeath()
