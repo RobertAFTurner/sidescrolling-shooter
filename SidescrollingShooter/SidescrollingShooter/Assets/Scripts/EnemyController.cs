@@ -50,8 +50,6 @@ public class EnemyController : EntityController
     {
         var currentDistanceFromPlayer = Vector2.Distance(transform.position, player.transform.position);
 
-        Debug.Log(currentDistanceFromPlayer);
-
         if (currentDistanceFromPlayer < attackDistance)
         {
             if (player.transform.position.x < transform.position.x)

@@ -40,12 +40,11 @@ public class PlayerController : EntityController
         if (Input.GetKey(KeyCode.A))
         {
             playerRigidBody.velocity = new Vector2(-speed, playerRigidBody.velocity.y);
-            gameObject.transform.rotation = new Quaternion(0, 180, 0, 0);
+            
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            playerRigidBody.velocity = new Vector2(speed, playerRigidBody.velocity.y);
-            gameObject.transform.rotation = new Quaternion(0, 0, 0, 0);
+            playerRigidBody.velocity = new Vector2(speed, playerRigidBody.velocity.y);            
         }           
         else
             playerRigidBody.velocity = new Vector2(0, playerRigidBody.velocity.y);
@@ -107,19 +106,6 @@ public class PlayerController : EntityController
                                               floorLayerMask);
 
         return cast.collider != null;
-    }
-
-    public void UpgradeWeapon()
-    {
-        var aimObj = gameObject.transform.FindChild("Aim");
-        aimObj.transform.FindChild("Gun").gameObject.SetActive(false);
-        var machineGunObject = aimObj.transform.FindChild("MachineGun").gameObject;
-
-        machineGunObject.SetActive(true);
-
-        var machineGunAnimator = machineGunObject.GetComponent<Animator>();
-        gameObject.GetComponent<PlayerAimWeapon>().SetAnimator(machineGunAnimator);
-        gameObject.GetComponent<PlayerAimWeapon>().gunUpgraded = true;
     }
 
     public override void HandleDeath()

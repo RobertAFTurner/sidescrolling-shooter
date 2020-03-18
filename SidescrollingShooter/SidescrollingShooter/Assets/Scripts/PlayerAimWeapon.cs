@@ -18,12 +18,15 @@ public class PlayerAimWeapon : MonoBehaviour
     [SerializeField]
     private GameObject impactEffect;
 
-    public bool gunUpgraded = false;
+    public int ammoCount = 200;
+
+    public int shotgunAmmoCount = 5;
 
     private float shootTimer;
 
     [SerializeField]
     private float shootTime = 0.2f;
+
 
     private void Start()
     {
@@ -47,21 +50,44 @@ public class PlayerAimWeapon : MonoBehaviour
         var localScale = new Vector3(0.5f, 0.5f, 1f);
 
         if (angle > 90 || angle < -90)
+        {
+            gameObject.transform.rotation = new Quaternion(0, 180, 0, 0);
             localScale.y = -0.5f;
+        }
+            
         else
+        {
+            gameObject.transform.rotation = new Quaternion(0, 0, 0, 0);
             localScale.y = 0.5f;
-
+        }
+            
         aimTransform.localScale = localScale;
-
     }
 
     private void HandleShoot()
     {
 
-        if (gunUpgraded)
+        if (ammoCount > 0)
             HandleShootMachineGun();
         else
-            HandleShootPistol();
+            HandleSingleShot();
+
+        if(shotgunAmmoCount > 0)
+            HandleShotgun();
+    }
+
+    private void HandleShotgun()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                var randomNumber = UnityEngine.Random.Range(-1f, 1f);
+                ShootWeapon(randomNumber);
+            }
+
+            shotgunAmmoCount--;
+        }
     }
 
     private void HandleShootMachineGun()
@@ -73,11 +99,12 @@ public class PlayerAimWeapon : MonoBehaviour
             {
                 ShootWeapon();
                 shootTimer = shootTime;
+                ammoCount--;
             }
         }
     }
 
-    private void HandleShootPistol()
+    private void HandleSingleShot()
     {
         if(Input.GetMouseButtonDown(0))
         {
@@ -85,11 +112,18 @@ public class PlayerAimWeapon : MonoBehaviour
         }
     }
 
-    private void ShootWeapon()
+    private void ShootWeapon(float offset = 0f)
     {
         animator.SetTrigger("Shoot");
-        var ray = Physics2D.Raycast(gunTip.position, MousePosition.GetMouseWorldPosition(Input.mousePosition, Camera.main) - transform.position, 20f, enemyLayerMask);
 
+        var direction = MousePosition.GetMouseWorldPosition(Input.mousePosition, Camera.main) - transform.position;
+
+        direction = new Vector3(direction.x, direction.y + offset);
+
+        var ray = Physics2D.Raycast(gunTip.position, direction, 20f, enemyLayerMask);
+
+        Debug.DrawRay(gunTip.position, direction, Color.red, 20f);
+        Debug.Log(direction);
         if (ray.collider != null)
         {
             var hitEnemy = ray.collider.gameObject;
@@ -101,8 +135,15 @@ public class PlayerAimWeapon : MonoBehaviour
         }
     }
 
-    internal void SetAnimator(Animator newAnimator)
+    public void AddAmmo(int count)
     {
-        animator = newAnimator;
+        ammoCount += count;
+    }
+
+    internal void AddShotgunAmmo(int count)
+    {
+        shotgunAmmoCount += count;
+
+        Debug.Log(shotgunAmmoCount);
     }
 }
