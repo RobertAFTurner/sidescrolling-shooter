@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
 public class HealthController : MonoBehaviour
 {
     [SerializeField]
-    int hitPoints = 1;    
+    private int hitPoints = 1;    
 
     private void Update()
     {
@@ -25,4 +23,6 @@ public class HealthController : MonoBehaviour
     {
         hitPoints -= damage;
     }
+
+    public int HitPointsRemaining() => hitPoints;
 }
