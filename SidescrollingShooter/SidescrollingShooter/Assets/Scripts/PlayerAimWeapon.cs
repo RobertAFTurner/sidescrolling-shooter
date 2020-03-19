@@ -122,8 +122,10 @@ public class PlayerAimWeapon : MonoBehaviour
 
         var ray = Physics2D.Raycast(gunTip.position, direction, 20f, enemyLayerMask);
 
-        Debug.DrawRay(gunTip.position, direction, Color.red, 20f);
-        Debug.Log(direction);
+        //Draw shot
+        //Debug.DrawRay(gunTip.position, direction, Color.red, 20f);
+        //Debug.Log(direction);
+
         if (ray.collider != null)
         {
             var hitEnemy = ray.collider.gameObject;
