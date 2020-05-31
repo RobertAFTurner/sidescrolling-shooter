@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerAimWeapon : MonoBehaviour
@@ -17,6 +18,9 @@ public class PlayerAimWeapon : MonoBehaviour
 
     [SerializeField]
     private GameObject impactEffect;
+
+    [SerializeField]
+    private LineRenderer lineRenderer;
 
     public int ammoCount = 200;
 
@@ -83,7 +87,7 @@ public class PlayerAimWeapon : MonoBehaviour
             for (int i = 0; i < 8; i++)
             {
                 var randomNumber = UnityEngine.Random.Range(-1f, 1f);
-                ShootWeapon(randomNumber);
+                StartCoroutine(ShootWeapon(randomNumber));
             }
 
             shotgunAmmoCount--;
@@ -97,7 +101,7 @@ public class PlayerAimWeapon : MonoBehaviour
             shootTimer -= Time.deltaTime;
             if(shootTimer <= 0)
             {
-                ShootWeapon();
+                StartCoroutine(ShootWeapon());
                 shootTimer = shootTime;
                 ammoCount--;
             }
@@ -108,23 +112,24 @@ public class PlayerAimWeapon : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
-            ShootWeapon();                     
+            StartCoroutine(ShootWeapon());                     
         }
     }
 
-    private void ShootWeapon(float offset = 0f)
+    private IEnumerator ShootWeapon(float offset = 0f)
     {
         animator.SetTrigger("Shoot");
-
-        var direction = MousePosition.GetMouseWorldPosition(Input.mousePosition, Camera.main) - transform.position;
+        var mousePos = Input.mousePosition;
+        var direction = MousePosition.GetMouseWorldPosition(mousePos, Camera.main);// - transform.position;
 
         direction = new Vector3(direction.x, direction.y + offset);
 
-        var ray = Physics2D.Raycast(gunTip.position, direction, 20f, enemyLayerMask);
+        var ray = Physics2D.Linecast(gunTip.position, direction, enemyLayerMask);
 
         //Draw shot
         //Debug.DrawRay(gunTip.position, direction, Color.red, 20f);
         //Debug.Log(direction);
+        lineRenderer.SetPosition(0, gunTip.position);
 
         if (ray.collider != null)
         {
@@ -134,7 +139,17 @@ public class PlayerAimWeapon : MonoBehaviour
 
             var effect = Instantiate(impactEffect, ray.point, new Quaternion());
             effect.transform.SetParent(hitEnemy.transform);
+            lineRenderer.SetPosition(1, effect.transform.position);
         }
+        else
+        {
+            lineRenderer.SetPosition(1, direction);
+        }
+
+
+        lineRenderer.gameObject.SetActive(true);
+        yield return new WaitForSeconds(0.02f);
+        lineRenderer.gameObject.SetActive(false);
     }
 
     public void AddAmmo(int count)
