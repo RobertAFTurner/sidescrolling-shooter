@@ -24,8 +24,6 @@ public class EnemyController : EntityController
 
     private bool isAttacking;
 
-
-
     private float attackTimer;
 
     private void Start()
@@ -93,6 +91,8 @@ public class EnemyController : EntityController
     public override void HandleDeath()
     {
         GlobalGameStats.score += pointsValue;
+
+        Camera.main.GetComponent<Animator>().SetTrigger("Shake");
         Destroy(gameObject);
     }
 }
