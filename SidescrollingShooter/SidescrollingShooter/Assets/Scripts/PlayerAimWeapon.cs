@@ -22,6 +22,9 @@ public class PlayerAimWeapon : MonoBehaviour
     [SerializeField]
     private LineRenderer[] lineRenderers;
 
+    [SerializeField]
+    private GameObject muzzelFlash;
+
     public int ammoCount = 200;
 
     public int shotgunAmmoCount = 5;
@@ -30,6 +33,8 @@ public class PlayerAimWeapon : MonoBehaviour
 
     [SerializeField]
     private float shootTime = 0.2f;
+
+    private bool shooting = false;
 
 
     private void Start()
@@ -70,7 +75,6 @@ public class PlayerAimWeapon : MonoBehaviour
 
     private void HandleShoot()
     {
-
         if (ammoCount > 0)
             HandleShootMachineGun();
         else
@@ -78,12 +82,19 @@ public class PlayerAimWeapon : MonoBehaviour
 
         if(shotgunAmmoCount > 0)
             HandleShotgun();
+        
+        if(Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1) && muzzelFlash.activeSelf)
+        {
+            muzzelFlash.SetActive(false);
+        }
     }
 
     private void HandleShotgun()
     {
         if (Input.GetMouseButtonDown(1))
-        {
+        {            
+            muzzelFlash.SetActive(true);
+
             for (int i = 0; i < 8; i++)
             {
                 var randomNumber = UnityEngine.Random.Range(-1f, 1f);       
@@ -101,6 +112,7 @@ public class PlayerAimWeapon : MonoBehaviour
             shootTimer -= Time.deltaTime;
             if(shootTimer <= 0)
             {
+                muzzelFlash.SetActive(true);
                 StartCoroutine(ShootWeapon());
                 shootTimer = shootTime;
                 ammoCount--;
@@ -112,13 +124,14 @@ public class PlayerAimWeapon : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
-            StartCoroutine(ShootWeapon());                     
+            StartCoroutine(ShootWeapon());
         }
     }
 
     private IEnumerator ShootWeapon(float offset = 0, int index = 0)
     {
         animator.SetTrigger("Shoot");
+        
         var mousePos = Input.mousePosition;
         var direction = MousePosition.GetMouseWorldPosition(mousePos, Camera.main);// - transform.position;
 
@@ -145,7 +158,6 @@ public class PlayerAimWeapon : MonoBehaviour
         {
             lineRenderers[index].SetPosition(1, direction);
         }
-
 
         lineRenderers[index].gameObject.SetActive(true);
         yield return new WaitForSeconds(0.02f);

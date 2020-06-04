@@ -3886,6 +3886,8 @@ MonoBehaviour:
   - {fileID: 1880136621}
   - {fileID: 1390702095}
   - {fileID: 1517040007}
+  muzzelFlash: {fileID: 159994990591628425, guid: 4a26e112ecbf8d843b7c6aec4104cf04,
+    type: 3}
   ammoCount: 200
   shotgunAmmoCount: 5
   shootTime: 0.05
