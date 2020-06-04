@@ -20,7 +20,7 @@ public class PlayerAimWeapon : MonoBehaviour
     private GameObject impactEffect;
 
     [SerializeField]
-    private LineRenderer lineRenderer;
+    private LineRenderer[] lineRenderers;
 
     public int ammoCount = 200;
 
@@ -86,8 +86,8 @@ public class PlayerAimWeapon : MonoBehaviour
         {
             for (int i = 0; i < 8; i++)
             {
-                var randomNumber = UnityEngine.Random.Range(-1f, 1f);
-                StartCoroutine(ShootWeapon(randomNumber));
+                var randomNumber = UnityEngine.Random.Range(-1f, 1f);       
+                StartCoroutine(ShootWeapon(randomNumber, i));
             }
 
             shotgunAmmoCount--;
@@ -116,7 +116,7 @@ public class PlayerAimWeapon : MonoBehaviour
         }
     }
 
-    private IEnumerator ShootWeapon(float offset = 0f)
+    private IEnumerator ShootWeapon(float offset = 0, int index = 0)
     {
         animator.SetTrigger("Shoot");
         var mousePos = Input.mousePosition;
@@ -129,7 +129,7 @@ public class PlayerAimWeapon : MonoBehaviour
         //Draw shot
         //Debug.DrawRay(gunTip.position, direction, Color.red, 20f);
         //Debug.Log(direction);
-        lineRenderer.SetPosition(0, gunTip.position);
+        lineRenderers[index].SetPosition(0, gunTip.position);
 
         if (ray.collider != null)
         {
@@ -139,17 +139,17 @@ public class PlayerAimWeapon : MonoBehaviour
 
             var effect = Instantiate(impactEffect, ray.point, new Quaternion());
             effect.transform.SetParent(hitEnemy.transform);
-            lineRenderer.SetPosition(1, effect.transform.position);
+            lineRenderers[index].SetPosition(1, effect.transform.position);
         }
         else
         {
-            lineRenderer.SetPosition(1, direction);
+            lineRenderers[index].SetPosition(1, direction);
         }
 
 
-        lineRenderer.gameObject.SetActive(true);
+        lineRenderers[index].gameObject.SetActive(true);
         yield return new WaitForSeconds(0.02f);
-        lineRenderer.gameObject.SetActive(false);
+        lineRenderers[index].gameObject.SetActive(false);
     }
 
     public void AddAmmo(int count)
