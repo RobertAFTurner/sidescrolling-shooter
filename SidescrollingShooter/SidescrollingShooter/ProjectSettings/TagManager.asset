@@ -16,7 +16,7 @@ TagManager:
   - 
   - Floor
   - Enemies
-  - 
+  - Background
   - 
   - 
   - 
@@ -39,6 +39,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 1816771123
+    locked: 0
+  - name: Terrain
+    uniqueID: 2981334467
+    locked: 0
+  - name: Entities
+    uniqueID: 2711438629
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
