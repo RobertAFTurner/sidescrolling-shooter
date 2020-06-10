@@ -150,6 +150,7 @@ MonoBehaviour:
   speed: 2
   attackStrength: 1
   attackSpeed: 0.8
+  pointsValue: 300
 --- !u!114 &6813954427018000373
 MonoBehaviour:
   m_ObjectHideFlags: 0

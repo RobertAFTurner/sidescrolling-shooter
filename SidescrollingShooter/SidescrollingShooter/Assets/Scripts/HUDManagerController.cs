@@ -12,13 +12,18 @@ public class HUDManagerController : MonoBehaviour
     [SerializeField]
     GameObject gunObject;
 
+    [SerializeField]
+    GameObject scoreObject;
+
     private TextMeshProUGUI shotgunText;
     private TextMeshProUGUI gunText;
+    private TextMeshProUGUI scoreText;
 
     private void Start()
     {
         shotgunText = shotgunObject.GetComponent<TextMeshProUGUI>();
         gunText = gunObject.GetComponent<TextMeshProUGUI>();
+        scoreText = scoreObject.GetComponent<TextMeshProUGUI>();
     }
 
     void Update()
@@ -27,5 +32,6 @@ public class HUDManagerController : MonoBehaviour
         var playerAimComponent = playerObject.GetComponent<PlayerAimWeapon>();
         shotgunText.text = playerAimComponent.shotgunAmmoCount.ToString();
         gunText.text = playerAimComponent.ammoCount.ToString();
+        scoreText.text = GlobalGameStats.score.ToString();
     }
 }
