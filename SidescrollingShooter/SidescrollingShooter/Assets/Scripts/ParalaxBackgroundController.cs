@@ -23,7 +23,7 @@ public class ParalaxBackgroundController : MonoBehaviour
         var distanceToMove = camera.transform.position.x * paralaxEffectMultiplyer;
         transform.position = new Vector2(startPosition + distanceToMove, camera.transform.position.y);
 
-        var tempValue = camera.transform.position.x * 1 - paralaxEffectMultiplyer;
+        var tempValue = camera.transform.position.x * (1 - paralaxEffectMultiplyer);
 
         if (tempValue > startPosition + length)
         {
