@@ -11,6 +11,7 @@ public class CrateController : MonoBehaviour
         if (collision.collider.tag == "Player")
         {
             var controller = collision.collider.gameObject.GetComponent<PlayerAimWeapon>();
+            AudioManagerController.Instance.PlaySound("Reload");
 
             if (!shotgunAmmo)
                 controller.AddAmmo(200);
