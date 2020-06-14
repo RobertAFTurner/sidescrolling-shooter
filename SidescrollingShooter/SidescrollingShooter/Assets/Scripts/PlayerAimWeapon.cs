@@ -94,6 +94,7 @@ public class PlayerAimWeapon : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {            
             muzzelFlash.SetActive(true);
+            AudioManagerController.Instance.PlaySound("Shotgun");
 
             for (int i = 0; i < 8; i++)
             {
@@ -109,14 +110,21 @@ public class PlayerAimWeapon : MonoBehaviour
     {
         if(Input.GetMouseButton(0))
         {
-            shootTimer -= Time.deltaTime;
+            shootTimer -= Time.deltaTime;            
+
             if(shootTimer <= 0)
             {
                 muzzelFlash.SetActive(true);
+                AudioManagerController.Instance.PlaySound("MachineGun");
+
                 StartCoroutine(ShootWeapon());
                 shootTimer = shootTime;
                 ammoCount--;
             }
+        }
+        else
+        {
+            AudioManagerController.Instance.StopSound("MachineGun");
         }
     }
 

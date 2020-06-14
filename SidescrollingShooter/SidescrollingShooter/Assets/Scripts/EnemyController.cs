@@ -93,6 +93,7 @@ public class EnemyController : EntityController
         GlobalGameStats.score += pointsValue;
 
         Camera.main.GetComponent<Animator>().SetTrigger("Shake");
+        AudioManagerController.Instance.PlaySound("BugDamaged");
         Destroy(gameObject);
     }
 }
