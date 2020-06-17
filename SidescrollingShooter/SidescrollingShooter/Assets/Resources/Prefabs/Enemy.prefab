@@ -405,7 +405,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  attackDistance: 10
+  attackDistance: 30
   speed: 2
   attackStrength: 1
   attackSpeed: 0.8

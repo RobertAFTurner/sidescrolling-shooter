@@ -15,8 +15,8 @@ public class PlayerController : EntityController
     [SerializeField]
     private float speed;
 
-    //[SerializeField]
-    //private Animator animator;
+    [SerializeField]
+    private Animator animator;
 
     private float jumpTime;
     private bool isJumping = false;
@@ -39,15 +39,19 @@ public class PlayerController : EntityController
     {
         if (Input.GetKey(KeyCode.A))
         {
-            playerRigidBody.velocity = new Vector2(-speed, playerRigidBody.velocity.y);
-            
+            animator.SetBool("IsRunning", true);
+            playerRigidBody.velocity = new Vector2(-speed, playerRigidBody.velocity.y);            
         }
         else if (Input.GetKey(KeyCode.D))
         {
+            animator.SetBool("IsRunning", true);
             playerRigidBody.velocity = new Vector2(speed, playerRigidBody.velocity.y);            
         }           
         else
+        {
+            animator.SetBool("IsRunning", false);
             playerRigidBody.velocity = new Vector2(0, playerRigidBody.velocity.y);
+        }
     }
 
     private void HandleJump()
